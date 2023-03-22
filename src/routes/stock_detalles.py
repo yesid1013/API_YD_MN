@@ -11,15 +11,15 @@ def add_stockdetalles(id_stock_enc):
     return StockDetController.agregar_stock_det(id_stock_enc)
 
 @cross_origin()
-@stockDet.route('/stock_local/<id_stock_enc>',methods =['GET'])
+@stockDet.route('/stock_local',methods =['GET'])
 @jwt_required
-def stock_de_un_local(id_stock_enc):
-    #current_user_id = get_jwt_identity()
+def stock_de_un_local():
+    current_user_id = get_jwt_identity()
     #user = Usuario.query.get(current_user_id)
     #if user.cargo!=1:
         #return "Acceso denegado"
     
-    return StockDetController.productos_en_local(id_stock_enc)
+    return StockDetController.productos_en_local(current_user_id)
 
 @cross_origin()
 @stockDet.route('/producto_en_local')

@@ -2,6 +2,7 @@ from flask import jsonify, request
 from models.Stock_detalles import *
 from models.Stock_encabezado import Stock_encabezado
 from models.Productos import Productos
+from models.Locales import Locales
 
 def agregar_stock_det(id_stock_enc):
     try:
@@ -21,18 +22,22 @@ def agregar_stock_det(id_stock_enc):
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})
 
-def productos_en_local(id_stock_enc): #consulta para ver el stock de un local especifico
+def productos_en_local(id_user): #consulta para ver el stock de un local especifico
     try:
         lista =[]
-        stock = db.session.query(Productos.nombre,Productos.precio,Stock_detalles.cantidad).filter(Stock_detalles.id_producto==Productos.id_producto,Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc==id_stock_enc, Stock_detalles.estado==1).all()
+
+        id_local = db.session.query(Locales.id_local).filter(Locales.id_user==id_user).first()
+
+        stock_enc = db.session.query(Stock_encabezado.id_stock_enc).filter(Stock_encabezado.id_local== id_local.id_local).first()
+
+
+        stock = db.session.query(Productos.nombre,Productos.precio,Stock_detalles.cantidad).filter(Stock_detalles.id_producto==Productos.id_producto,Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc==stock_enc.id_stock_enc, Stock_detalles.estado==1).all()
 
         for producto in stock:
             contenido = {"Nombre" : producto.nombre, "Precio" : producto.precio, "Cantidad" : producto.cantidad}
             lista.append(contenido)
         
-        header =request.headers.get('authorization')
-        print(header)
-
+        print(stock_enc.id_stock_enc)
         return jsonify(lista)
 
     except Exception as e:
