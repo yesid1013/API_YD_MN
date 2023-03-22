@@ -15,6 +15,7 @@ def add_stockdetalles(id_stock_enc):
 @jwt_required
 def stock_de_un_local():
     current_user_id = get_jwt_identity()
+    
     #user = Usuario.query.get(current_user_id)
     #if user.cargo!=1:
         #return "Acceso denegado"

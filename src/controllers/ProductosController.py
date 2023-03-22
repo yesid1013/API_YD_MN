@@ -17,4 +17,25 @@ def agregar_producto():
     
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})
+    
+
+def get_productos():
+    try: 
+        lista = []
+        allproducts = db.session.query(Productos.nombre,Productos.num_serie,Productos.id_tipo_producto,Productos.precio).filter(Productos.estado==1).all()
+        
+        for producto in allproducts:
+            datos ={"Nombre":producto.nombre, "Num_serie":producto.num_serie,"Id_tipo_producto":producto.id_tipo_producto ,"Precio" : producto.precio }
+            lista.append(datos)
+        
+        return jsonify(lista)
+
+    except Exception as e:
+        return jsonify({"Ha ocurrido un error" : str(e)})
+
+    finally:
+        db.session.close()
+        
+
+
         
