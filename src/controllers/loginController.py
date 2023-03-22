@@ -20,7 +20,7 @@ def login():
         
             else:
                 access_token = create_access_token(identity=usuario.id_user)                
-                return jsonify(token=access_token)
+                return jsonify({"token" : access_token, "user_id" : usuario.id_user, "cargo" : usuario.cargo})
 
     except Exception as e:
         return jsonify({"Ha ocurrido un error " : str(e) })
