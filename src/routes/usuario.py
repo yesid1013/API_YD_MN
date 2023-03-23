@@ -15,3 +15,8 @@ def usuarios():
 @jwt_required
 def dashboard():
     return UsuarioController.cargar_dashboard()
+
+@cross_origin()
+@users.route('/listar_usuarios', methods=['GET'])
+def listar_usuarios():
+    return UsuarioController.listar_usuarios()

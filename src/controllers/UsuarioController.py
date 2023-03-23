@@ -39,4 +39,16 @@ def cargar_dashboard():
     finally:
         db.session.close()
 
+def listar_usuarios():
+    try:
+        usuarios = Usuario.query.filter_by(estado=1).all()
+        if not usuarios:
+            return jsonify({'message': 'no hay parqueaderos'}), 404
+        else:
+            tousuarios = [usuario.getDatos() for usuario in usuarios]
+            return jsonify(tousuarios)
+
+    except Exception as e:
+        return jsonify({"Ha ocurrido un error" : str(e)}) 
+
 
