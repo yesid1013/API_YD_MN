@@ -20,3 +20,8 @@ def dashboard():
 @users.route('/listar_usuarios', methods=['GET'])
 def listar_usuarios():
     return UsuarioController.listar_usuarios()
+
+@cross_origin()
+@users.route('/actualizar_usuario/<id_user>', methods=['PUT'])
+def actualizar_usuario(id_user):
+    return UsuarioController.editar_usuario(id_user)

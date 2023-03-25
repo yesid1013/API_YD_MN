@@ -4,23 +4,26 @@ from models.Stock_encabezado import Stock_encabezado
 from models.Productos import Productos
 from models.Locales import Locales
 
-def agregar_stock_det(id_stock_enc):
+def agregar_stock_det(id_user): #agregar producto al stock
     try:
-        stock_enc = Stock_encabezado.query.get(id_stock_enc)
-        if not stock_enc:
-            return jsonify({"message" : "No se encontro el stock encabezado"})
-        else:
-            id_producto = request.json['id_producto']
-            cantidad = request.json['cantidad']
-            new_stockdet = Stock_detalles(id_stock_enc,id_producto,cantidad)
-            db.session.add(new_stockdet)
-            db.session.commit()
-            db.session.close()
-            return jsonify({"message" : "Insercion de producto exitoso", "status" : 200})
+        id_local = db.session.query(Locales.id_local).filter(Locales.id_user==id_user).first()
+        id_stock_enc = db.session.query(Stock_encabezado.id_stock_enc).filter(Stock_encabezado.id_local== id_local.id_local).first()
+        
+        id_producto = request.json["id_producto"]
+        cantidad = request.json['cantidad']
 
+        producto = Stock_detalles.query.filter_by(id_stock_enc=id_stock_enc.id_stock_enc,id_producto=id_producto,estado=1).first()
+
+        if not producto:
+            newproducto = Stock_detalles(id_stock_enc.id_stock_enc,id_producto,cantidad)
+            db.session.add(newproducto)
+            db.session.commit()
+            return jsonify({"message" : "Producto insertado"})
+        else:
+            return jsonify({"message" : "El producto ya se encuentra en su stock"}) , 400
 
     except Exception as e:
-        return jsonify({"Ha ocurrido un error" : str(e)})
+        return jsonify({"message" : "Ha ocurrido un error", "error" : str(e)}) 
 
 def productos_en_local(id_user): #consulta para ver el stock de un local especifico
     try:
@@ -31,10 +34,10 @@ def productos_en_local(id_user): #consulta para ver el stock de un local especif
         stock_enc = db.session.query(Stock_encabezado.id_stock_enc).filter(Stock_encabezado.id_local== id_local.id_local).first()
 
 
-        stock = db.session.query(Stock_detalles.id_stock_det,Productos.nombre,Productos.precio,Stock_detalles.cantidad).filter(Stock_detalles.id_producto==Productos.id_producto,Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc==stock_enc.id_stock_enc, Stock_detalles.estado==1).all()
+        stock = db.session.query(Stock_detalles.id_stock_enc,Stock_detalles.id_stock_det,Productos.nombre,Productos.precio,Stock_detalles.cantidad).filter(Stock_detalles.id_producto==Productos.id_producto,Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc==stock_enc.id_stock_enc, Stock_detalles.estado==1).all()
 
         for producto in stock:
-            contenido = {"id_stock_det":producto.id_stock_det,"Nombre" : producto.nombre, "Precio" : producto.precio, "Cantidad" : producto.cantidad}
+            contenido = {"id_stock_enc" : producto.id_stock_enc,"id_stock_det":producto.id_stock_det,"Nombre" : producto.nombre, "Precio" : producto.precio, "Cantidad" : producto.cantidad}
             lista.append(contenido)
         
         return jsonify(lista)

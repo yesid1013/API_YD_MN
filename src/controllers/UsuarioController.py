@@ -11,11 +11,15 @@ def agregar_usuario():
         email = request.json['email']
         password = request.json['password']
         cargo = request.json['cargo']
-        new_user = Usuario(num_documento,nombre,apellido,email,password,cargo)
-        db.session.add(new_user)
-        db.session.commit()
-
-        return jsonify({"message": "Usuario insertado", "status" : 200})
+        usuario = Usuario.query.filter_by(num_documento=num_documento).first()
+        print(usuario)
+        if not usuario:
+            new_user = Usuario(num_documento,nombre,apellido,email,password,cargo)
+            db.session.add(new_user)
+            db.session.commit()
+            return jsonify({"message": "Usuario insertado", "status" : 200})
+        else:
+            return jsonify({"message": "El usuario ya se encuentra registrado", "status" : 400}) , 400
     
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})
@@ -43,12 +47,31 @@ def listar_usuarios():
     try:
         usuarios = Usuario.query.filter_by(estado=1).all()
         if not usuarios:
-            return jsonify({'message': 'no hay parqueaderos'}), 404
+            return jsonify({'message': 'no hay usuarios'}), 404
         else:
             tousuarios = [usuario.getDatos() for usuario in usuarios]
             return jsonify(tousuarios)
 
     except Exception as e:
-        return jsonify({"Ha ocurrido un error" : str(e)}) 
+        return jsonify({"Ha ocurrido un error" : str(e)})
+
+def editar_usuario(id_user):
+    try:
+        usuario = Usuario.query.get(id_user)
+        if not usuario:
+            return jsonify({"message" : "Usuario no encontrado"}) , 404
+        else :
+            usuario.num_documento = request.json['num_documento']
+            usuario.nombre = request.json['nombre']
+            usuario.apellido = request.json['apellido']
+            usuario.email = request.json['email']
+            usuario.password = request.json['password']
+            usuario.cargo = request.json['cargo']
+            db.session.commit()
+
+            return jsonify({"message" : "Usuario actualizado"})
+
+    except Exception as e:
+        return jsonify({"message" : "error"})
 
 

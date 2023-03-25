@@ -5,10 +5,14 @@ from flask_jwt_extended import jwt_required,get_jwt_identity
 from flask_cors import cross_origin
 
 stockDet = Blueprint('stockDet',__name__)
+
 @cross_origin()
-@stockDet.route('/add_stockDet/<id_stock_enc>',methods =['POST'])
-def add_stockdetalles(id_stock_enc):
-    return StockDetController.agregar_stock_det(id_stock_enc)
+@stockDet.route('/add_stockDet',methods =['POST'])
+@jwt_required
+def add_stockdetalles():
+    current_user_id = get_jwt_identity()
+
+    return StockDetController.agregar_stock_det(current_user_id)
 
 @cross_origin()
 @stockDet.route('/stock_local',methods =['GET'])
