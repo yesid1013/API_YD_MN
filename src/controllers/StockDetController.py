@@ -65,11 +65,11 @@ def editar_stock(id_stock_det): #Actualizar cantidad de un producto en el stock
     try:
         stock = Stock_detalles.query.get(id_stock_det)
         if not stock:
-            return jsonify({"Message" : "Stock no encontrado"}) , 404
+            return jsonify({"message" : "Stock no encontrado"}) , 404
         else:
             stock.cantidad = request.json['cantidad']
             db.session.commit()
-            return jsonify({"Message" : "Producto actualizado"}) , 200
+            return jsonify({"message" : "Producto actualizado"}) , 200
 
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})
@@ -81,11 +81,11 @@ def eliminar_producto(id_stock_det): #Cambiar el estado del producto a 0
     try:
         producto = Stock_detalles.query.get(id_stock_det)
         if not producto:
-            return jsonify({"Message" : "Producto no encontrado"}) , 404
+            return jsonify({"message" : "Producto no encontrado"}) , 404
         else:
             producto.estado = 0
             db.session.commit()
-            return jsonify({"Message" : "Producto eliminado"})
+            return jsonify({"message" : "Producto eliminado"})
 
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})

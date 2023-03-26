@@ -25,3 +25,8 @@ def listar_usuarios():
 @users.route('/actualizar_usuario/<id_user>', methods=['PUT'])
 def actualizar_usuario(id_user):
     return UsuarioController.editar_usuario(id_user)
+
+@cross_origin()
+@users.route('/eliminar_usuario/<id_user>', methods=['DELETE'])
+def eliminar_usuario(id_user):
+    return UsuarioController.eliminar_usuario(id_user)

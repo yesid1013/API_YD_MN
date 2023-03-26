@@ -69,9 +69,23 @@ def editar_usuario(id_user):
             usuario.cargo = request.json['cargo']
             db.session.commit()
 
-            return jsonify({"message" : "Usuario actualizado"})
+            return jsonify({"message" : "Usuario actualizado"}), 200
 
     except Exception as e:
-        return jsonify({"message" : "error"})
+        return jsonify({"message" : str(e)})
+
+def eliminar_usuario(id_user):
+    try:
+        usuario = Usuario.query.get(id_user)
+        if not usuario:
+            return jsonify({"message" : "Usuario no encontrado"}) , 404
+        else:
+            usuario.estado = 0
+            db.session.commit()
+            return jsonify({"message" : "Usuario eliminado"})
+
+    except Exception as e:
+        return jsonify({"message" : str(e)})
+
 
 

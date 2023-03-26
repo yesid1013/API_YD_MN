@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,jsonify
 from utils.db import db
 from controllers import UsuarioController
 from routes.usuario import users
@@ -39,7 +39,7 @@ app.register_blueprint(products)
 
 
 def pagina_no_encontrada(error):
-    return "<h1>La pagina a la que intentas acceder no existe...</h1>"
+    return jsonify({"message" : "Pagina no encontrada"})
 
 
 

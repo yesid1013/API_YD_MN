@@ -17,3 +17,13 @@ def agregar_producto():
 @jwt_required
 def obtener_productos():
     return ProductosController.get_productos()
+
+@cross_origin()
+@products.route('/actualizar_producto/<id_producto>', methods=['PUT'])
+def actualizar_producto(id_producto):
+    return ProductosController.editar_producto(id_producto)
+
+@cross_origin()
+@products.route('/eliminar_product/<id_producto>', methods=['DELETE'])
+def eliminar_product(id_producto):
+    return ProductosController.eliminar_producto(id_producto)
