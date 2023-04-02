@@ -36,6 +36,24 @@ def get_productos():
     finally:
         db.session.close()
 
+
+def get_productos_borrados():
+    try: 
+        lista = []
+        allproducts = db.session.query(Productos.id_producto,Productos.nombre,Productos.num_serie,Productos.id_tipo_producto,Productos.precio).filter(Productos.estado==0).all()
+        
+        for producto in allproducts:
+            datos ={"id_producto" : producto.id_producto,"Nombre":producto.nombre, "Num_serie":producto.num_serie,"Id_tipo_producto":producto.id_tipo_producto ,"Precio" : producto.precio }
+            lista.append(datos)
+        
+        return jsonify(lista)
+
+    except Exception as e:
+        return jsonify({"Ha ocurrido un error" : str(e)})
+
+    finally:
+        db.session.close()
+
 def editar_producto(id_producto):
     try:
         producto = Productos.query.get(id_producto)
@@ -61,6 +79,19 @@ def eliminar_producto(id_producto):
             producto.estado = 0
             db.session.commit()
             return jsonify({"message" : "Producto eliminado"})
+            
+    except Exception as e:
+        return jsonify({"Ha ocurrido un error" : str(e)})
+    
+def restaurar_producto(id_producto):
+    try:
+        producto = Productos.query.get(id_producto)
+        if not producto:
+            return jsonify({"message" : "Producto no encontrado"}) , 404
+        else:
+            producto.estado = 1
+            db.session.commit()
+            return jsonify({"message" : "Producto restaurado"})
             
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})

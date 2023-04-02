@@ -49,6 +49,30 @@ def productos_en_local(id_user): #consulta para ver el stock de un local especif
         db.session.close()
 
 
+def productos_en_local_borrados(id_user): #consulta para ver el stock de un local especifico
+    try:
+        lista =[]
+
+        id_local = db.session.query(Locales.id_local).filter(Locales.id_user==id_user).first()
+
+        stock_enc = db.session.query(Stock_encabezado.id_stock_enc).filter(Stock_encabezado.id_local== id_local.id_local).first()
+
+
+        stock = db.session.query(Stock_detalles.id_stock_enc,Stock_detalles.id_stock_det,Productos.nombre,Productos.precio,Stock_detalles.cantidad).filter(Stock_detalles.id_producto==Productos.id_producto,Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc==stock_enc.id_stock_enc, Stock_detalles.estado==0).all()
+
+        for producto in stock:
+            contenido = {"id_stock_enc" : producto.id_stock_enc,"id_stock_det":producto.id_stock_det,"Nombre" : producto.nombre, "Precio" : producto.precio, "Cantidad" : producto.cantidad}
+            lista.append(contenido)
+        
+        return jsonify(lista)
+
+    except Exception as e:
+        return jsonify({"Ha ocurrido un error" : str(e)})
+
+    finally:
+        db.session.close()
+
+
 def producto_especifico(): #Buscar un producto especifico en una tienda
     try:
         producto = db.session.query(Productos.nombre,Productos.precio,Stock_detalles.cantidad).filter(Stock_detalles.id_producto==Productos.id_producto, Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc == 1, Productos.id_producto == 4).first()
@@ -86,6 +110,22 @@ def eliminar_producto(id_stock_det): #Cambiar el estado del producto a 0
             producto.estado = 0
             db.session.commit()
             return jsonify({"message" : "Producto eliminado"})
+
+    except Exception as e:
+        return jsonify({"Ha ocurrido un error" : str(e)})
+    
+    finally:
+        db.session.close()
+
+def restaurar_producto(id_stock_det): #Cambiar el estado del producto a 1
+    try:
+        producto = Stock_detalles.query.get(id_stock_det)
+        if not producto:
+            return jsonify({"message" : "Producto no encontrado"}) , 404
+        else:
+            producto.estado = 1
+            db.session.commit()
+            return jsonify({"message" : "Producto restaurado"})
 
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})

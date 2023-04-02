@@ -54,6 +54,18 @@ def listar_usuarios():
 
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})
+    
+def listar_usuarios_borrados():
+    try:
+        usuarios = Usuario.query.filter_by(estado=0).all()
+        if not usuarios:
+            return jsonify({'message': 'no hay usuarios'}), 404
+        else:
+            tousuarios = [usuario.getDatos() for usuario in usuarios]
+            return jsonify(tousuarios)
+
+    except Exception as e:
+        return jsonify({"Ha ocurrido un error" : str(e)})
 
 def editar_usuario(id_user):
     try:
@@ -83,6 +95,20 @@ def eliminar_usuario(id_user):
             usuario.estado = 0
             db.session.commit()
             return jsonify({"message" : "Usuario eliminado"})
+
+    except Exception as e:
+        return jsonify({"message" : str(e)})
+    
+
+def restaurar_usuario(id_user):
+    try:
+        usuario = Usuario.query.get(id_user)
+        if not usuario:
+            return jsonify({"message" : "Usuario no encontrado"}) , 404
+        else:
+            usuario.estado = 1
+            db.session.commit()
+            return jsonify({"message" : "Usuario restaurado"})
 
     except Exception as e:
         return jsonify({"message" : str(e)})

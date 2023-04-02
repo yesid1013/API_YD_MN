@@ -27,3 +27,14 @@ def actualizar_producto(id_producto):
 @products.route('/eliminar_product/<id_producto>', methods=['DELETE'])
 def eliminar_product(id_producto):
     return ProductosController.eliminar_producto(id_producto)
+
+@cross_origin()
+@products.route('/restaurar_product/<id_producto>', methods=['DELETE'])
+def restaurar_product(id_producto):
+    return ProductosController.restaurar_producto(id_producto)
+
+@cross_origin()
+@products.route('/get_productos_borrados', methods=['GET'])
+def get_productos_borrados():
+    return ProductosController.get_productos_borrados()
+

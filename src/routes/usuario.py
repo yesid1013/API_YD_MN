@@ -22,6 +22,11 @@ def listar_usuarios():
     return UsuarioController.listar_usuarios()
 
 @cross_origin()
+@users.route('/listar_usuarios_borrados', methods=['GET'])
+def listar_usuarios_borrados():
+    return UsuarioController.listar_usuarios_borrados()
+
+@cross_origin()
 @users.route('/actualizar_usuario/<id_user>', methods=['PUT'])
 def actualizar_usuario(id_user):
     return UsuarioController.editar_usuario(id_user)
@@ -30,3 +35,8 @@ def actualizar_usuario(id_user):
 @users.route('/eliminar_usuario/<id_user>', methods=['DELETE'])
 def eliminar_usuario(id_user):
     return UsuarioController.eliminar_usuario(id_user)
+
+@cross_origin()
+@users.route('/restaurar_usuario/<id_user>', methods=['DELETE'])
+def restaurar_usuario(id_user):
+    return UsuarioController.restaurar_usuario(id_user)

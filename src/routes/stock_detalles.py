@@ -27,6 +27,13 @@ def stock_de_un_local():
     return StockDetController.productos_en_local(current_user_id)
 
 @cross_origin()
+@stockDet.route('/stock_local_borrado',methods =['GET'])
+@jwt_required
+def stock_de_un_local_borrado():
+    current_user_id = get_jwt_identity()
+    return StockDetController.productos_en_local_borrados(current_user_id)
+
+@cross_origin()
 @stockDet.route('/producto_en_local')
 def producto_en_local():
     return StockDetController.producto_especifico()
@@ -40,3 +47,8 @@ def actualizar_stock(id_stock_det):
 @stockDet.route('/eliminar_producto/<id_stock_det>', methods = ['DELETE'])
 def eliminar_producto(id_stock_det):
     return StockDetController.eliminar_producto(id_stock_det)
+
+@cross_origin()
+@stockDet.route('/restaurar_producto/<id_stock_det>', methods = ['DELETE'])
+def restaurar_producto(id_stock_det):
+    return StockDetController.restaurar_producto(id_stock_det)
