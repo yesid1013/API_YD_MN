@@ -1,12 +1,12 @@
 from flask import Flask,jsonify
 from utils.db import db
-from controllers import UsuarioController
 from routes.usuario import users
 from routes.stock_detalles import stockDet
 from routes.login import login_
 from routes.factura_enc import facEnc
 from routes.factura_det import facDet
 from routes.productos import products
+from routes.clientes import cliente
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
 from datetime import timedelta
@@ -32,6 +32,7 @@ app.register_blueprint(login_)
 app.register_blueprint(facEnc)
 app.register_blueprint(facDet)
 app.register_blueprint(products)
+app.register_blueprint(cliente)
 
 
 
