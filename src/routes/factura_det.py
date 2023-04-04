@@ -7,3 +7,8 @@ facDet = Blueprint('facDet',__name__)
 @facDet.route('/facturasDet/<id_fac_enc>')
 def facturasDet(id_fac_enc):
     return FacturaDetController.artiuculosDeFactura(id_fac_enc)
+
+@cross_origin()
+@facDet.route('/insertar_facturaDet',methods=['POST'])
+def insertar_facturaDet():
+    return FacturaDetController.insertar_facturaDet()
