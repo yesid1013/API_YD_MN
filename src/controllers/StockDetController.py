@@ -34,10 +34,10 @@ def productos_en_local(id_user): #consulta para ver el stock de un local especif
         stock_enc = db.session.query(Stock_encabezado.id_stock_enc).filter(Stock_encabezado.id_local== id_local.id_local).first()
 
 
-        stock = db.session.query(Stock_detalles.id_stock_enc,Stock_detalles.id_stock_det,Productos.nombre,Productos.precio,Stock_detalles.cantidad).filter(Stock_detalles.id_producto==Productos.id_producto,Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc==stock_enc.id_stock_enc, Stock_detalles.estado==1).all()
+        stock = db.session.query(Stock_detalles.id_stock_enc,Stock_detalles.id_stock_det,Productos.nombre,Productos.precio,Stock_detalles.cantidad, Productos.id_producto).filter(Stock_detalles.id_producto==Productos.id_producto,Stock_encabezado.id_stock_enc==Stock_detalles.id_stock_enc,Stock_encabezado.id_stock_enc==stock_enc.id_stock_enc, Stock_detalles.estado==1).all()
 
         for producto in stock:
-            contenido = {"id_stock_enc" : producto.id_stock_enc,"id_stock_det":producto.id_stock_det,"Nombre" : producto.nombre, "Precio" : producto.precio, "Cantidad" : producto.cantidad}
+            contenido = {"id_stock_enc" : producto.id_stock_enc,"id_stock_det":producto.id_stock_det,"Nombre" : producto.nombre, "Precio" : producto.precio, "Cantidad" : producto.cantidad,"Id_producto": producto.id_producto}
             lista.append(contenido)
         
         return jsonify(lista)
