@@ -33,6 +33,7 @@ def insertar_factEncabezado(id_user):
 
 def ultima_factura():
     try:
+        db.session.commit()
         factura = Factura_encabezado.query.order_by(Factura_encabezado.id_fac_enc.desc()).first()
         datos = {"id_fac_enc" : factura.id_fac_enc, "id_local" : factura.id_local, "id_cliente" : factura.id_cliente, "fecha" : factura.fecha, "precio_total" : factura.precio_total }
         return factura.id_fac_enc

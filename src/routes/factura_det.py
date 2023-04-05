@@ -11,4 +11,4 @@ def facturasDet(id_fac_enc):
 @cross_origin()
 @facDet.route('/insertar_facturaDet',methods=['POST'])
 def insertar_facturaDet():
-    return FacturaDetController.insertar_facturaDet()
+    return FacturaDetController.agregar_factDet()
