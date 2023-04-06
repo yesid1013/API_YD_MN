@@ -6,10 +6,7 @@ from flask_jwt_extended import jwt_required,get_jwt_identity
 
 facEnc = Blueprint('facEnc',__name__)
 
-@cross_origin()
-@facEnc.route('/facturas_enc')
-def facturas_enc():
-    return FacturaEncController.buscar_facturas()
+
 
 @cross_origin()
 @facEnc.route('/ultima_facturas_enc')
@@ -22,3 +19,10 @@ def ultima_facturas_enc():
 def insertar_factEncabezado():
     current_user_id = get_jwt_identity()
     return FacturaEncController.insertar_factEncabezado(current_user_id)
+
+@cross_origin()
+@facEnc.route('/facturas_en_local')
+@jwt_required
+def facturas_en_local():
+    current_user_id = get_jwt_identity()
+    return FacturaEncController.facturas_local(current_user_id)

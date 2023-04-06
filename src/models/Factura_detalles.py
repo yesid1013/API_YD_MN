@@ -22,7 +22,7 @@ class Factura_detalles(db.Model):
             "id_fac_det": self.id_fac_det,
             "id_fac_enc" : self.id_fac_enc,
             "id_producto" : self.id_producto,
-            "precio" : self.id_producto,
+            "precio" : self.precio,
             "cantidad" : self.cantidad,
             "estado" : self.estado
         }

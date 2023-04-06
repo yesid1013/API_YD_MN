@@ -7,12 +7,20 @@ from controllers import FacturaEncController
 
 def artiuculosDeFactura(id_fac_enc): #Buscar aritculos de una factura - Factura detalles
     try:
-        facDet = Factura_detalles.query.filter_by(id_fac_enc=id_fac_enc).all()
-        if not facDet:
-            return jsonify({'message': 'No hay factura detalles'}) , 404
-        else:
-            toFacturaDet = [registro.getDatos() for registro in facDet]
-            return jsonify(toFacturaDet)
+        lista = []
+        facturas = db.session.query(Factura_detalles.cantidad,Factura_detalles.precio,Productos.nombre).filter(Factura_detalles.id_fac_enc == id_fac_enc, Factura_detalles.id_producto == Productos.id_producto).all()
+
+        for factura in facturas:
+            datos = {"nombre" : factura.nombre, "precio" : factura.precio, "cantidad" : factura.cantidad}
+            lista.append(datos)
+
+        return jsonify(lista)
+        # facDet = Factura_detalles.query.filter_by(id_fac_enc=id_fac_enc).all()
+        # if not facDet:
+        #     return jsonify({'message': 'No hay factura detalles'}) , 404
+        # else:
+        #     toFacturaDet = [registro.getDatos() for registro in facDet]
+        #     return jsonify(toFacturaDet)
     except Exception as e:
         return jsonify({"Ha ocurrido un error" : str(e)})
     
@@ -21,7 +29,6 @@ def artiuculosDeFactura(id_fac_enc): #Buscar aritculos de una factura - Factura 
 
 def insertar_facturaDet():
     try:
-        print(request.json)
         precio = request.json["precio"]
         cantidad = request.json["cantidad"]
         id_producto = request.json["id_producto"]
