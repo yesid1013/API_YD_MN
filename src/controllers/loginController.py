@@ -6,7 +6,7 @@ from flask_jwt_extended import create_access_token, set_access_cookies,unset_jwt
 def login():
     try:
         username = request.json["usuario"]
-        password = request.json["contraseña"]
+        password = request.json["password"]
 
         usuario = Usuario.query.filter_by(email=username).first()
         if not usuario:
