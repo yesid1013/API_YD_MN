@@ -20,9 +20,15 @@ def insertar_factEncabezado():
     current_user_id = get_jwt_identity()
     return FacturaEncController.insertar_factEncabezado(current_user_id)
 
+
 @cross_origin()
 @facEnc.route('/facturas_en_local')
 @jwt_required
 def facturas_en_local():
     current_user_id = get_jwt_identity()
     return FacturaEncController.facturas_local(current_user_id)
+
+@cross_origin()
+@facEnc.route('/get_facturas')
+def get_facturas():
+    return FacturaEncController.get_facturas()

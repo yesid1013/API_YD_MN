@@ -14,7 +14,6 @@ def agregar_producto():
 
 @cross_origin()
 @products.route('/obtener_productos', methods=['GET'])
-@jwt_required
 def obtener_productos():
     return ProductosController.get_productos()
 
