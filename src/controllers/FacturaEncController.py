@@ -50,7 +50,9 @@ def facturas_local(id_user):
         facturas = db.session.query(Factura_encabezado.id_fac_enc,Clientes.nombre,Clientes.apellido,Clientes.num_documento, Factura_encabezado.fecha, Factura_encabezado.precio_total,Factura_encabezado.id_local).join(Clientes,Factura_encabezado.id_cliente==Clientes.id_cliente).filter(Factura_encabezado.id_local == id_local.id_local, Factura_encabezado.estado == 1).all()
 
         for factura in facturas:
-            datos = {"id_fac_enc" : factura.id_fac_enc, "nombre" : factura.nombre, "apellido" : factura.apellido, "fecha" : factura.fecha, "precio_total" : factura.precio_total, "id_local" : factura.id_local, "num_documento" : factura.num_documento}
+
+            fecha_formato = factura.fecha.strftime('%y/%m/%d %H:%M:%S')
+            datos = {"id_fac_enc" : factura.id_fac_enc, "nombre" : factura.nombre, "apellido" : factura.apellido, "fecha" : fecha_formato, "precio_total" : factura.precio_total, "id_local" : factura.id_local, "num_documento" : factura.num_documento}
             lista.append(datos)
         
         return jsonify(lista)
@@ -66,7 +68,6 @@ def get_facturas():
 
         for factura in facturas:
             fecha_formato = factura.fecha.strftime('%y/%m/%d %H:%M:%S')
-
             datos = {"id_fac_enc" : factura.id_fac_enc, "nombre" : factura.nombre, "apellido" : factura.apellido, "fecha" : fecha_formato, "precio_total" : factura.precio_total, "id_local" : factura.id_local, "num_documento" : factura.num_documento, "nombre_local":factura.nombre_local}
             lista.append(datos)
         
